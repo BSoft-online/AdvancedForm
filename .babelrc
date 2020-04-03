@@ -1,0 +1,45 @@
+{
+    "presets": [
+      [
+        "next/babel",
+        {
+          "preset-env": {
+            "useBuiltIns": "entry",
+            "corejs": 3
+          }
+        }
+      ]
+    ],
+    "plugins": [
+      [
+        "babel-plugin-import",
+        {
+          "libraryName": "@material-ui/core",
+          "libraryDirectory": "",
+          "camel2DashComponentName": false
+        },
+        "core"
+      ],
+      [
+        "babel-plugin-import",
+        {
+          "libraryName": "@material-ui/icons",
+          "libraryDirectory": "",
+          "camel2DashComponentName": false
+        },
+        "icons"
+      ],
+      [
+        "module-resolver",
+        {
+          "root": ["./"],
+          "alias": {
+            "features": "./features",
+            "utils": "./utils",
+            "services": "./services",
+            "config": "./config"
+          }
+        }
+      ]
+    ]
+  }
