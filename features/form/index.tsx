@@ -1,13 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import {
-    Typography,
-    OutlinedInput,
-    Button,
-    CircularProgress,
-} from '@material-ui/core';
+import { Typography, Button, CircularProgress } from '@material-ui/core';
 import { Container, Fieldset, ButtonsPanel } from './containers';
 import { Label, ErrorMessage } from './elements';
 import { Success } from './success';
+import { PlaceholderInput } from 'components/placeholderInput';
 import {
     handleEmailChange,
     handleLogout,
@@ -60,12 +56,11 @@ export const Form: React.FunctionComponent = () => {
                 </Typography>
                 <Label>
                     <Typography variant="h6">Email</Typography>
-                    <OutlinedInput
+                    <PlaceholderInput
                         type="email"
                         name="email"
                         required
                         autoFocus
-                        placeholder="Your email address"
                         onChange={handleEmailChange(setters)}
                         value={email}
                         fullWidth
@@ -73,7 +68,7 @@ export const Form: React.FunctionComponent = () => {
                 </Label>
                 <Label>
                     <Typography variant="h6">Password</Typography>
-                    <OutlinedInput
+                    <PlaceholderInput
                         type="password"
                         name="password"
                         required
