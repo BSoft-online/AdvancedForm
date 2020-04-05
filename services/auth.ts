@@ -5,7 +5,7 @@ type ServiceResult = {
     result?: string;
 };
 
-export const login = async (email: string): Promise<ServiceResult> => {
+export const register = async (email: string): Promise<ServiceResult> => {
     await new Promise((res) => {
         setTimeout(() => res(), 1000);
     });

@@ -19,7 +19,7 @@ class App extends BaseApp {
         return (
             <>
                 <Head>
-                    <title>Validated Form</title>
+                    <title>Advanced Form</title>
                 </Head>
                 <ThemeProvider theme={theme}>
                     <CssBaseline />

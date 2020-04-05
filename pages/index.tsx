@@ -7,7 +7,7 @@ import { Form } from 'features/form';
 const Home: NextPage = () => (
     <>
         <Head>
-            <title>Validated Form</title>
+            <title>Advanced Form</title>
         </Head>
         <CenteredContainer>
             <Form />

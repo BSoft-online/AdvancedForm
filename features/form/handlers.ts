@@ -1,18 +1,20 @@
 import React from 'react';
-import { login } from 'services/auth';
+import { register } from 'services/auth';
 import {
     validateEmail,
     validatePassword,
     MIN_PASSWORD_LENGTH,
 } from './validators';
 
+export interface Errors {
+    [id: string]: string;
+}
+
 type Setters = {
     setEmail: React.Dispatch<React.SetStateAction<string>>;
-    setEmailError: React.Dispatch<React.SetStateAction<string>>;
     setPassword: React.Dispatch<React.SetStateAction<string>>;
-    setPasswordError: React.Dispatch<React.SetStateAction<string>>;
-    setServiceError: React.Dispatch<React.SetStateAction<string>>;
     setServiceResponse: React.Dispatch<React.SetStateAction<string>>;
+    setErrors: React.Dispatch<React.SetStateAction<Errors>>;
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
     setPasswordScore: React.Dispatch<React.SetStateAction<number>>;
 };
@@ -22,7 +24,10 @@ export const handleEmailChange = (setters: Setters) => (
 ): void => {
     const text = e.currentTarget.value;
     setters.setEmail(text);
-    setters.setEmailError(validateEmail(text));
+    setters.setErrors((val) => ({
+        ...val,
+        password: validateEmail(text),
+    }));
 };
 
 export const handlePasswordChange = ({
@@ -41,7 +46,10 @@ export const handlePasswordChange = ({
             : checkPassword(text).score + 2;
     setters.setPasswordScore(passwordScore);
     setters.setPassword(text);
-    setters.setPasswordError(validatePassword(text));
+    setters.setErrors((val) => ({
+        ...val,
+        password: validatePassword(text),
+    }));
 };
 
 export const handleSubmit = ({
@@ -55,23 +63,25 @@ export const handleSubmit = ({
 }) => async (): Promise<void> => {
     const emailError = validateEmail(email);
     const passwordError = validatePassword(password);
-    setters.setEmailError(emailError);
-    setters.setPasswordError(passwordError);
+    setters.setErrors((val) => ({
+        ...val,
+        email: emailError,
+        password: passwordError,
+    }));
     if (emailError || passwordError) return;
 
     setters.setLoading(true);
-    const { result, error } = await login(email);
-    setters.setServiceError(error ? error : '');
+    const { result, error } = await register(email);
+    setters.setErrors((val) => ({
+        ...val,
+        service: error ? error : '',
+    }));
     result && setters.setServiceResponse(result);
     setters.setLoading(false);
 };
 
-export const handleLogout = (setters: Setters) => (): void => {
-    setters.setEmail('');
-    setters.setEmailError('');
-    setters.setPassword('');
-    setters.setPasswordError('');
-    setters.setServiceError('');
+export const handleSnackbarClose = (setters: Setters) => (): void => {
+    setters.setErrors({});
     setters.setServiceResponse('');
     setters.setLoading(false);
 };

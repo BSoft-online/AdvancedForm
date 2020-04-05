@@ -1,24 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Typography, Button, CircularProgress } from '@material-ui/core';
 import { Container, Fieldset, ButtonsPanel } from './containers';
-import { Label, ErrorMessage } from './elements';
-import { Success } from './success';
+import { Label } from './elements';
+import { Snackbar } from './snackbar';
 import { PlaceholderInput } from 'components/placeholderInput';
 import {
     handleEmailChange,
-    handleLogout,
     handlePasswordChange,
     handleSubmit,
+    handleSnackbarClose,
+    Errors,
 } from './handlers';
 import { PassStrength } from './passStrength';
 
 export const Form: React.FunctionComponent = () => {
     const [email, setEmail] = useState('');
-    const [emailError, setEmailError] = useState('');
     const [password, setPassword] = useState('');
-    const [passwordError, setPasswordError] = useState('');
-    const [serviceError, setServiceError] = useState('');
     const [serviceResponse, setServiceResponse] = useState('');
+    const [errors, setErrors] = useState<Errors>({});
     const [loading, setLoading] = useState(false);
     const [passwordScore, setPasswordScore] = useState(0);
     const checkPassword = useRef<Function>();
@@ -32,19 +31,25 @@ export const Form: React.FunctionComponent = () => {
 
     const setters = {
         setEmail,
-        setEmailError,
+        setErrors,
         setPassword,
-        setPasswordError,
-        setServiceError,
         setServiceResponse,
         setLoading,
         setPasswordScore,
     };
+    const errorMessage = Object.values(errors).find((e) => e) || '';
 
-    return serviceResponse ? (
-        <Success email={serviceResponse} onLogout={handleLogout(setters)} />
-    ) : (
+    return (
         <Container component="form">
+            <Snackbar
+                message={
+                    serviceResponse
+                        ? `Hello ${serviceResponse}! You registered correctly!`
+                        : errorMessage
+                }
+                isError={!!errorMessage}
+                onClose={handleSnackbarClose(setters)}
+            />
             <Fieldset>
                 <Typography
                     variant="h5"
@@ -52,7 +57,7 @@ export const Form: React.FunctionComponent = () => {
                     align="center"
                     gutterBottom
                 >
-                    Log in
+                    Register
                 </Typography>
                 <Label>
                     <Typography variant="h6">Email</Typography>
@@ -82,20 +87,17 @@ export const Form: React.FunctionComponent = () => {
                     />
                     <PassStrength score={passwordScore} />
                 </Label>
-                <ErrorMessage variant="body2" color="error">
-                    {emailError || passwordError || serviceError}
-                </ErrorMessage>
                 <ButtonsPanel>
                     <Button
                         variant="contained"
                         color="primary"
-                        disabled={!!(emailError || passwordError || loading)}
+                        disabled={loading}
                         onClick={handleSubmit({ setters, email, password })}
                     >
                         {loading ? (
                             <CircularProgress size={18} className="loader" />
                         ) : null}
-                        <Typography>Submit</Typography>
+                        <Typography>Register</Typography>
                     </Button>
                 </ButtonsPanel>
             </Fieldset>
