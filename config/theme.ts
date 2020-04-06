@@ -35,5 +35,13 @@ export const theme = createMuiTheme({
                 flex: 1,
             },
         },
+        MuiOutlinedInput: {
+            root: {
+                '& > label': {
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                },
+            },
+        },
     },
 });
