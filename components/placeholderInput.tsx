@@ -4,7 +4,7 @@ import { Theme } from '@material-ui/core/styles';
 import { OutlinedInput, OutlinedInputProps } from '@material-ui/core';
 
 const Placeholder = styled('label')(({ theme }: { theme: Theme }) => ({
-    color: theme.palette.grey[100],
+    color: theme.palette.grey[300],
     backgroundColor: 'transparent',
     position: 'absolute',
 }));
@@ -17,6 +17,7 @@ export const PlaceholderInput: React.FunctionComponent<OutlinedInputProps> = ({
 }) => (
     <OutlinedInput
         required
+        fullWidth
         value={value}
         {...rest}
         startAdornment={

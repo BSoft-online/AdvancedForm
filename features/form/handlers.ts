@@ -1,87 +1,64 @@
-import React from 'react';
 import { register } from 'services/auth';
-import {
-    validateEmail,
-    validatePassword,
-    MIN_PASSWORD_LENGTH,
-} from './validators';
+import { validate } from './validators';
+import { textFields } from './constants';
+import { StringDictionary, Setters, SubmitArguments } from './types';
 
-export interface Errors {
-    [id: string]: string;
-}
+const setLocalStorageData = (values: StringDictionary): void[] =>
+    Object.entries(values).map(([key, value]) =>
+        localStorage.setItem(key, value)
+    );
 
-type Setters = {
-    setEmail: React.Dispatch<React.SetStateAction<string>>;
-    setPassword: React.Dispatch<React.SetStateAction<string>>;
-    setServiceResponse: React.Dispatch<React.SetStateAction<string>>;
-    setErrors: React.Dispatch<React.SetStateAction<Errors>>;
-    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-    setPasswordScore: React.Dispatch<React.SetStateAction<number>>;
-};
-
-export const handleEmailChange = (setters: Setters) => (
-    e: React.ChangeEvent<HTMLInputElement>
-): void => {
-    const text = e.currentTarget.value;
-    setters.setEmail(text);
+const validateForm = ({ values, setters }: SubmitArguments): boolean => {
+    const errors = textFields.reduce((acc, field) => {
+        const error = validate({
+            text: values[field.name] || '',
+            name: field.name,
+            limit: field.limit,
+            maxValue: field.maxValue,
+            minValue: field.minValue,
+            validationType: field.validationType,
+        });
+        return {
+            ...acc,
+            [field.name]: error,
+        };
+    }, {});
     setters.setErrors((val) => ({
         ...val,
-        password: validateEmail(text),
+        ...errors,
     }));
-};
-
-export const handlePasswordChange = ({
-    setters,
-    checkPassword,
-}: {
-    setters: Setters;
-    checkPassword: Function | undefined;
-}) => (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const text = e.currentTarget.value;
-    const passwordScore =
-        !text || !checkPassword
-            ? 0
-            : text.length < MIN_PASSWORD_LENGTH
-            ? 1
-            : checkPassword(text).score + 2;
-    setters.setPasswordScore(passwordScore);
-    setters.setPassword(text);
-    setters.setErrors((val) => ({
-        ...val,
-        password: validatePassword(text),
-    }));
+    return !!Object.values(errors).find((e) => e);
 };
 
 export const handleSubmit = ({
     setters,
-    email,
-    password,
-}: {
-    setters: Setters;
-    email: string;
-    password: string;
-}) => async (): Promise<void> => {
-    const emailError = validateEmail(email);
-    const passwordError = validatePassword(password);
-    setters.setErrors((val) => ({
-        ...val,
-        email: emailError,
-        password: passwordError,
-    }));
-    if (emailError || passwordError) return;
+    values,
+}: SubmitArguments) => async (): Promise<void> => {
+    if (validateForm({ values, setters })) return;
 
     setters.setLoading(true);
-    const { result, error } = await register(email);
-    setters.setErrors((val) => ({
-        ...val,
-        service: error ? error : '',
-    }));
-    result && setters.setServiceResponse(result);
-    setters.setLoading(false);
+    try {
+        const { result, error } = await register(values.email);
+        setters.setErrors((val) => ({
+            ...val,
+            serviceResponse: error ? error : '',
+        }));
+        if (result) {
+            setters.setValues((val) => ({ ...val, serviceResponse: result }));
+            setLocalStorageData(values);
+        }
+    } catch (e) {
+        setters.setErrors((val) => ({
+            ...val,
+            serviceResponse: e.message,
+        }));
+    } finally {
+        setters.setLoading(false);
+    }
 };
 
 export const handleSnackbarClose = (setters: Setters) => (): void => {
     setters.setErrors({});
-    setters.setServiceResponse('');
+    setters.setValues((val) => ({ ...val, serviceResponse: '' }));
     setters.setLoading(false);
 };

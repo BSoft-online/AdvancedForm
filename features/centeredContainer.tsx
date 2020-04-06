@@ -7,7 +7,7 @@ type Props = {
 };
 
 const Container = styled(Grid)({
-    height: '100vh',
+    minHeight: '100vh',
 });
 
 export const CenteredContainer: FunctionComponent<Props> = ({

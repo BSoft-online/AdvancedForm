@@ -25,8 +25,12 @@ export const Snackbar: React.FunctionComponent<Props> = ({
             horizontal: 'right',
         }}
         open={!!message}
-        // autoHideDuration={5000}
+        autoHideDuration={5000}
         onClose={(): void => onClose()}
+        ClickAwayListenerProps={{
+            mouseEvent: false,
+            touchEvent: false,
+        }}
         message={
             <Container color={isError ? 'error.main' : 'success.main'}>
                 <Icon color="inherit">

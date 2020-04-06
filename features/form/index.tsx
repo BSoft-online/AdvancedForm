@@ -1,23 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Typography, Button, CircularProgress } from '@material-ui/core';
 import { Container, Fieldset, ButtonsPanel } from './containers';
-import { Label } from './elements';
 import { Snackbar } from './snackbar';
-import { PlaceholderInput } from 'components/placeholderInput';
-import {
-    handleEmailChange,
-    handlePasswordChange,
-    handleSubmit,
-    handleSnackbarClose,
-    Errors,
-} from './handlers';
-import { PassStrength } from './passStrength';
+import { Input } from './input';
+import { handleSubmit, handleSnackbarClose } from './handlers';
+import { StringDictionary } from './types';
+import { textFields } from './constants';
 
 export const Form: React.FunctionComponent = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [serviceResponse, setServiceResponse] = useState('');
-    const [errors, setErrors] = useState<Errors>({});
+    const [values, setValues] = useState<StringDictionary>({});
+    const [errors, setErrors] = useState<StringDictionary>({});
     const [loading, setLoading] = useState(false);
     const [passwordScore, setPasswordScore] = useState(0);
     const checkPassword = useRef<Function>();
@@ -30,10 +22,8 @@ export const Form: React.FunctionComponent = () => {
     }, []);
 
     const setters = {
-        setEmail,
+        setValues,
         setErrors,
-        setPassword,
-        setServiceResponse,
         setLoading,
         setPasswordScore,
     };
@@ -43,8 +33,8 @@ export const Form: React.FunctionComponent = () => {
         <Container component="form">
             <Snackbar
                 message={
-                    serviceResponse
-                        ? `Hello ${serviceResponse}! You registered correctly!`
+                    values.serviceResponse && !errorMessage
+                        ? `Hello ${values.serviceResponse}! You are registered!`
                         : errorMessage
                 }
                 isError={!!errorMessage}
@@ -59,40 +49,22 @@ export const Form: React.FunctionComponent = () => {
                 >
                     Register
                 </Typography>
-                <Label>
-                    <Typography variant="h6">Email</Typography>
-                    <PlaceholderInput
-                        type="email"
-                        name="email"
-                        required
-                        autoFocus
-                        onChange={handleEmailChange(setters)}
-                        value={email}
-                        fullWidth
+                {textFields.map((field, index) => (
+                    <Input
+                        key={index}
+                        setters={setters}
+                        checkPassword={checkPassword.current}
+                        passwordScore={passwordScore}
+                        value={values[field.name]}
+                        {...field}
                     />
-                </Label>
-                <Label>
-                    <Typography variant="h6">Password</Typography>
-                    <PlaceholderInput
-                        type="password"
-                        name="password"
-                        required
-                        placeholder="Your password"
-                        onChange={handlePasswordChange({
-                            setters,
-                            checkPassword: checkPassword.current,
-                        })}
-                        value={password}
-                        fullWidth
-                    />
-                    <PassStrength score={passwordScore} />
-                </Label>
+                ))}
                 <ButtonsPanel>
                     <Button
                         variant="contained"
                         color="primary"
                         disabled={loading}
-                        onClick={handleSubmit({ setters, email, password })}
+                        onClick={handleSubmit({ setters, values })}
                     >
                         {loading ? (
                             <CircularProgress size={18} className="loader" />
