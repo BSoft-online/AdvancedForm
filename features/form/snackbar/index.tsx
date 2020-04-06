@@ -5,7 +5,7 @@ import {
     Icon,
     Typography,
 } from '@material-ui/core';
-import { Close, CheckCircleOutline } from '@material-ui/icons';
+import { Close, CheckCircleOutline, ErrorOutline } from '@material-ui/icons';
 import { Container } from './containers';
 
 type Props = {
@@ -34,7 +34,7 @@ export const Snackbar: React.FunctionComponent<Props> = ({
         message={
             <Container color={isError ? 'error.main' : 'success.main'}>
                 <Icon color="inherit">
-                    <CheckCircleOutline />
+                    {isError ? <ErrorOutline /> : <CheckCircleOutline />}
                 </Icon>
                 <Typography>{message}</Typography>
             </Container>

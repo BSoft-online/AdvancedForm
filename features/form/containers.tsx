@@ -7,9 +7,11 @@ export const Container = styled(Paper)(({ theme }: { theme: Theme }) => ({
     marginTop: '50px',
     marginBottom: '50px',
     backgroundColor: theme.palette.grey[100],
-    minWidth: '300px',
+    [theme.breakpoints.down('sm')]: {
+        width: '90%',
+    },
     [theme.breakpoints.up('md')]: {
-        width: '400px',
+        width: '700px',
     },
 }));
 
@@ -23,6 +25,7 @@ export const ButtonsPanel = styled('div')(({ theme }: { theme: Theme }) => ({
     display: 'flex',
     textAlign: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
     '& button': {
         position: 'relative',
         [theme.breakpoints.down('sm')]: {

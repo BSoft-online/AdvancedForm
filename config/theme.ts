@@ -30,5 +30,10 @@ export const theme = createMuiTheme({
     },
     overrides: {
         MuiCssBaseline: cssBaseLineStyles(grey[900]),
+        MuiSnackbarContent: {
+            message: {
+                flex: 1,
+            },
+        },
     },
 });
