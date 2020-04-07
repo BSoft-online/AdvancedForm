@@ -34,7 +34,7 @@ export const Form: React.FunctionComponent = () => {
             <Snackbar
                 message={
                     values.serviceResponse && !errorMessage
-                        ? `Hello ${values.serviceResponse}! You are registered!`
+                        ? 'Sended!'
                         : errorMessage
                 }
                 isError={!!errorMessage}

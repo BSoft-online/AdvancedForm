@@ -1,5 +1,5 @@
 import { Setters } from '../types';
-import { validate } from '../validators';
+import { validate } from '../validation';
 import { ValidationType, MIN_PASSWORD_LENGTH } from '../constants';
 
 const handlePasswordStrength = ({

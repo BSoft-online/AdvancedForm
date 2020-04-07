@@ -20,13 +20,13 @@ export const errorMessages: ErrorMessages = {
         invalid: 'Last name cannot contain digits',
         required: 'Last name is required',
     },
-    message: {
-        invalid: 'Message cannot contain more than 10 characters',
-        required: 'Message is required',
+    textarea1: {
+        invalid: 'Textarea 1 cannot contain more than 10 characters',
+        required: 'Textarea 1 is required',
     },
-    description: {
-        invalid: 'Description cannot contain more than 20 characters',
-        required: 'Description is required',
+    textarea2: {
+        invalid: 'Textarea 2 cannot contain more than 20 characters',
+        required: 'Textarea 2 is required',
     },
     email: {
         invalid: 'Email address is not valid',
@@ -64,16 +64,16 @@ export const textFields = [
         validationType: ValidationType.literal,
     },
     {
-        name: 'message',
-        label: 'Message',
-        placeholder: 'Your message',
+        name: 'textarea1',
+        label: 'Textarea 1',
+        placeholder: 'Textarea 1',
         limit: 10,
         multiline: true,
     },
     {
-        name: 'description',
-        label: 'Description',
-        placeholder: 'Your description',
+        name: 'textarea2',
+        label: 'Textarea 2',
+        placeholder: 'Textarea 2',
         limit: 20,
         multiline: true,
     },

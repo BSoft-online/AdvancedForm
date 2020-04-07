@@ -3,7 +3,11 @@ import {
     errorMessages,
     ValidationType,
 } from './constants';
-import { FunctionDictionary, ValidateFunction } from './types';
+import {
+    FunctionDictionary,
+    ValidateFunction,
+    MainValidateFunction,
+} from './types';
 
 const checkEmail = (content = ''): boolean =>
     /^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*\.+([\\.-]?\w+)+$/.test(content);
@@ -79,29 +83,23 @@ export const validate = ({
     limit,
     maxValue,
     minValue,
-}: {
-    text: string;
-    name: string;
-    validationType?: string;
-    limit?: number;
-    maxValue?: number;
-    minValue?: number;
-}): string => {
+}: MainValidateFunction): string => {
     let error = '';
+    const ensuredText = text || '';
     if (validationType) {
-        error = validators[validationType]({ name, text });
+        error = validators[validationType]({ name, text: ensuredText });
     }
     if (!error && limit) {
         error = validators[ValidationType.limit]({
             name,
-            text,
+            text: ensuredText,
             limit,
         });
     }
     if (!error && minValue !== undefined && maxValue !== undefined) {
         error = validators[ValidationType.valueInterval]({
             name,
-            text,
+            text: ensuredText,
             minValue,
             maxValue,
         });

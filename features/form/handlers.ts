@@ -1,5 +1,5 @@
 import { register } from 'services/auth';
-import { validate } from './validators';
+import { validate } from './validation';
 import { textFields } from './constants';
 import { StringDictionary, Setters, SubmitArguments } from './types';
 

@@ -14,6 +14,10 @@ export interface ValidateFunction {
     maxValue?: number;
 }
 
+export interface MainValidateFunction extends ValidateFunction {
+    validationType?: string;
+}
+
 export interface Setters {
     setValues: React.Dispatch<React.SetStateAction<StringDictionary>>;
     setErrors: React.Dispatch<React.SetStateAction<StringDictionary>>;

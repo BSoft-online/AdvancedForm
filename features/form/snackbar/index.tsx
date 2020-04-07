@@ -21,7 +21,7 @@ export const Snackbar: React.FunctionComponent<Props> = ({
 }) => (
     <BaseSnackbar
         anchorOrigin={{
-            vertical: 'top',
+            vertical: 'bottom',
             horizontal: 'right',
         }}
         open={!!message}
