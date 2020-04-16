@@ -4,12 +4,7 @@ module.exports = {
         '!**/*.d.ts',
         '!**/node_modules/**',
     ],
-    roots: [
-        '<rootDir>/components',
-        '<rootDir>/features',
-        '<rootDir>/utils',
-        '<rootDir>/services',
-    ],
+    roots: ['<rootDir>/components', '<rootDir>/features', '<rootDir>/services'],
     testPathIgnorePatterns: ['/node_modules/', '/.next/'],
     transform: {
         '^.+\\.(js|jsx|ts|tsx)$': '<rootDir>/node_modules/babel-jest',
